@@ -6,6 +6,8 @@ ifeq (${CI},true)
 	DOCKER_COMPOSE_RUN_OPTIONS=--rm --user root -T
 endif
 
+PACKAGE_VERSION=$(shell cat package.json | grep -i version | sed -e "s/ //g" | cut -c 12- | sed -e "s/\",//g")
+
 install:
 	docker-compose run $(DOCKER_COMPOSE_RUN_OPTIONS) yarn install
 
@@ -24,7 +26,7 @@ peer:
 	docker-compose run $(DOCKER_COMPOSE_RUN_OPTIONS) yarn add -P react@17 @types/react@17
 
 publish:
-	@docker-compose run $(DOCKER_COMPOSE_RUN_OPTIONS) yarn publish --non-interactive
+	docker-compose run $(DOCKER_COMPOSE_RUN_OPTIONS) yarn publish --access public --registry https://npm.pkg.github.com/ --new-version $(PACKAGE_VERSION) --non-interactive
 
 publish-npmjs:
 	docker-compose run $(DOCKER_COMPOSE_RUN_OPTIONS) yarn publish --access public --registry https://registry.npmjs.org/ --new-version $(PACKAGE_VERSION) --non-interactive
