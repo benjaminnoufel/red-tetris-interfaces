@@ -43,7 +43,7 @@ jobs:
         run: make install
 
       - name: Install the peer dependencies
-        run: make install
+        run: make peer
 
       - name: Build the types
         run: make types
