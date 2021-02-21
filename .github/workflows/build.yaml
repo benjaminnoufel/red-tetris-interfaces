@@ -1,0 +1,33 @@
+name: Build CI
+
+on:
+    push:
+        branches:
+            - next
+            - latest
+
+    pull_request:
+
+jobs:
+    build:
+        name: Check if the project can be build
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout the project
+              uses: actions/checkout@v2
+
+            - name: Setup for the environment
+              run: cp .env.example .env
+
+            - name: Install the github token
+              run: make token
+
+            - name: Install the Node.js dependencies
+              run: make install
+
+            - name: Install the peer dependencies
+              run: make peer
+
+            - name: Check if the types can be generated
+              run: make types
